@@ -15,18 +15,34 @@ export default function Header() {
           <ul className="flex flex-1 items-center justify-end gap-3">
             <li>
               <Link
-                href="/signin"
-                className="btn-sm bg-white text-gray-800 shadow-sm hover:bg-gray-50"
+                href="/accueil"
+                className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
               >
-                Login
+                Accueil
               </Link>
             </li>
             <li>
               <Link
-                href="/signup"
+                href="/signin"
+                className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
+              >
+                Nos projets
+              </Link>
+            </li>
+                        <li>
+              <Link
+                href="/mon-devis"
+                className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
+              >
+                Mon devis
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/connexion"
                 className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
               >
-                Register
+                Connexion
               </Link>
             </li>
           </ul>
