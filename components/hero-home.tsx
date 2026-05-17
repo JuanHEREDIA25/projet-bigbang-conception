@@ -1,6 +1,12 @@
 import Image from "next/image";
 import PageIllustration from "@/components/page-illustration";
 import illustration01 from "@/public/images/illustration-01.webp"
+import {
+  Hammer,
+  Zap,
+  Paintbrush,
+  Wrench
+} from "lucide-react";
 
 export default function HeroHome() {
   return (
@@ -82,35 +88,77 @@ export default function HeroHome() {
             data-aos="zoom-y-out"
             data-aos-delay={600}
           >
-            <div className="relative aspect-video rounded-2xl bg-gray-900 px-5 py-3 shadow-xl before:pointer-events-none before:absolute before:-inset-5 before:border-y before:[border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1] after:absolute after:-inset-5 after:-z-10 after:border-x after:[border-image:linear-gradient(to_bottom,transparent,--theme(--color-slate-300/.8),transparent)1]">
-              <div className="relative mb-8 flex items-center justify-between before:block before:h-[9px] before:w-[41px] before:bg-[length:16px_9px] before:[background-image:radial-gradient(circle_at_4.5px_4.5px,var(--color-gray-600)_4.5px,transparent_0)] after:w-[41px]">
-                <span className="text-[13px] font-medium text-white">
-                  cruip.com
-                </span>
-              </div>
-              <div className="font-mono text-gray-500 [&_span]:opacity-0">
-                <span className="animate-[code-1_10s_infinite] text-gray-200">
-                  npm login
-                </span>{" "}
-                <span className="animate-[code-2_10s_infinite]">
-                  --registry=https://npm.pkg.github.com
-                </span>
-                <br />
-                <span className="animate-[code-3_10s_infinite]">
-                  --scope=@phanatic
-                </span>{" "}
-                <span className="animate-[code-4_10s_infinite]">
-                  Successfully logged-in.
-                </span>
-                <br />
-                <br />
-                <span className="animate-[code-5_10s_infinite] text-gray-200">
-                  npm publish
-                </span>
-                <br />
-                <span className="animate-[code-6_10s_infinite]">
-                  Package published.
-                </span>
+            <div className="relative rounded-2xl bg-gray-900 px-5 py-6 shadow-xl before:pointer-events-none before:absolute before:-inset-5 before:border-y before:[border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1] after:absolute after:-inset-5 after:-z-10 after:border-x after:[border-image:linear-gradient(to_bottom,transparent,--theme(--color-slate-300/.8),transparent)1]">
+              <div className="grid grid-cols-2 gap-3 h-full">
+                <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:bg-white/10">
+                  <div className="mb-5 flex justify-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-500/10 border border-blue-400/20">
+                      <Hammer className="mb-4 h-14 w-14 text-blue-400 transition-transform duration-300 group-hover:scale-110h-10 w-10 text-blue-400 transition-transform duration-300 group-hover:scale-110"/>
+                    </div>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <h3 className="text-x1 font-bold text-white">
+                      Rénovation
+                    </h3>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <p className="mt-2 text-sm text-gray-400">
+                      Modernisations complète de vos espaces
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:bg-white/10">
+                  <div className="mb-5 flex justify-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-500/10 border border-blue-400/20">
+                      <Zap className="mb-4 h-14 w-14 text-blue-400 transition-transform duration-300 group-hover:scale-110h-10 w-10 text-blue-400 transition-transform duration-300 group-hover:scale-110"/>
+                    </div>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <h3 className="text-x1 font-bold text-white">
+                      Electricité
+                    </h3>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <p className="mt-2 text-sm text-gray-400">
+                      Installation et depannage électrique
+                    </p>
+                  </div>
+                </div>
+                <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:bg-white/10">
+                  <div className="mb-5 flex justify-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-500/10 border border-blue-400/20">
+                      <Wrench className="mb-4 text-5x1mb-4 h-14 w-14 text-blue-400 transition-transform duration-300 group-hover:scale-110h-10 w-10 text-blue-400 transition-transform duration-300 group-hover:scale-110"/>
+                    </div>
+                  </div>
+                    <div className="mb-5 flex justify-center">
+                      <h3 className="text-x1 font-bold text-white">
+                        Plomberie
+                      </h3>
+                    </div>
+                    <div className="mb-5 flex justify-center">
+                      <p className="mt-2 text-sm text-gray-400">
+                        Réparation et installation sanitaire
+                      </p>
+                    </div>
+                </div>
+                <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:bg-white/10">
+                  <div className="mb-5 flex justify-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-500/10 border border-blue-400/20">
+                      <Paintbrush className="mb-4 text-5x1mb-4 h-14 w-14 text-blue-400 transition-transform duration-300 group-hover:scale-110h-10 w-10 text-blue-400 transition-transform duration-300 group-hover:scale-110"/>
+                    </div>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <h3 className="text-x1 font-bold text-white">
+                      Peinture
+                    </h3>
+                  </div>
+                  <div className="mb-5 flex justify-center">
+                    <p className="mt-2 text-sm text-gray-400">
+                      Finitions modernes et élégantes
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
