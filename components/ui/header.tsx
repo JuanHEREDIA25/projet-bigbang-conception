@@ -15,7 +15,7 @@ export default function Header() {
           <ul className="flex flex-1 items-center justify-end gap-3">
             <li>
               <Link
-                href="/accueil"
+                href="/"
                 className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
               >
                 Accueil
@@ -39,7 +39,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/connexion"
+                href="/signin"
                 className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
               >
                 Connexion
