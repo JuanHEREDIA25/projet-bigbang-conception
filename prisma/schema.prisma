@@ -10,65 +10,98 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
   ADMIN
 }
 
+enum DevisStatus {
+  PENDING
+  CONTACTING
+  DONE
+}
+
 model User {
-  id  Int @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   firstname String?
-  lastname String?
-  email String @unique
-  password String
-  role  Role @default(ADMIN)
+  lastname  String?
+  email     String  @unique
+  password  String
+  role      Role    @default(ADMIN)
 
   projects Project[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
 }
 
 model Project {
-  id Int @id @default(autoincrement())
-  slug String @unique
-  picture String
+  id          Int    @id @default(autoincrement())
+  title       String
+  slug        String @unique
+  coverImage  String
   description String
 
+  images ProjectImage[]
+
   categoryId Int
-  category  Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
 
   userId Int?
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectImage {
+  id Int @id @default(autoincrement())
+
+  url String
+
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
   projects Project[]
+  devis    Devis[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Devis {
-  id Int @id @default(autoincrement())
-  firstname String
-  lastname String
-  email String @unique
-  phone String
-  category String
+  id          Int         @id @default(autoincrement())
+  firstname   String
+  lastname    String
+  email       String      @unique
+  phone       String
+  categoryId  Int?
+  category    Category?   @relation(fields: [categoryId], references: [id])
   description String
+  status      DevisStatus @default(PENDING)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model Image {
+  id        Int    @id @default(autoincrement())
+  path      String
+  section   String
+  sortOrder Int    @default(0)
 
+  @@unique([path, section])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

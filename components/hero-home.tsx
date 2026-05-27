@@ -1,14 +1,37 @@
 import Image from "next/image";
-import PageIllustration from "@/components/page-illustration";
-import illustration01 from "@/public/images/illustration-01.webp"
+import PageIllustration from "./page-illustration";
 import {
   Hammer,
   Zap,
   Paintbrush,
   Wrench
 } from "lucide-react";
+import {supabase} from "@/lib/supabase/client"
+import {prisma} from "@/lib/prisma/prisma"
 
-export default function HeroHome() {
+
+
+export default async function HeroHome() {
+
+  const images = await prisma.image.findMany({
+    where: {
+      section: "homepage",
+    },
+
+    orderBy: {
+      sortOrder: "asc",
+    }
+  })
+  const homepageImages = images.map((image) => ({
+  ...image,
+  url: supabase.storage
+    .from("images-bigbang")
+    .getPublicUrl(image.path).data.publicUrl,
+}));
+    
+    
+    
+
   return (
     <section className="relative">
       <PageIllustration />
@@ -21,22 +44,18 @@ export default function HeroHome() {
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
               data-aos="zoom-y-out"
             >
-              <div className="relative h-64 w-fullrelative aspect-video w-full overflow-hidden rounded-xl">
+              {homepageImages.map((image)=>(
+              <div key={image.id}
+              className="relative h-64 w-full aspect-video overflow-hidden rounded-xl">
                 <Image
                   className="object-cover"
-                  src={illustration01}
+                  src={image.url}
                   fill
                   alt="Avatar 01"
                 />
               </div>
-              <div className="relative h-64 w-fullrelative aspect-video w-full overflow-hidden rounded-xl">
-                <Image
-                  className="object-cover"
-                  src={illustration01}
-                  fill
-                  alt="Avatar 01"
-                />
-              </div>
+              ))}
+              
             </div>
             <h1
               className="mt-10 mb-6 border-y text-5xl font-bold [border-image:linear-gradient(to_right,transparent,--theme(--color-slate-300/.8),transparent)1] md:text-6xl"
