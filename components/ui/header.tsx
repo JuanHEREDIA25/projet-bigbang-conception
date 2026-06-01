@@ -23,15 +23,15 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/signin"
+                href="/projets"
                 className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
               >
                 Nos projets
               </Link>
             </li>
-                        <li>
+            <li>
               <Link
-                href="/mon-devis"
+                href="/devis"
                 className="btn-sm bg-white text-gray-800 shadow-sm hover:text-[#d4af37] transition-colors"
               >
                 Mon devis
@@ -39,7 +39,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/signin"
+                href="/admin/signin"
                 className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
               >
                 Connexion
