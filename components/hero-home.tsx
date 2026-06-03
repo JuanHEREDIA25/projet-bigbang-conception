@@ -8,10 +8,14 @@ import {
 } from "lucide-react";
 import {supabase} from "@/lib/supabase/client"
 import {prisma} from "@/lib/prisma/prisma"
+import { HomepageImageModal } from "./admin/editAdminButton";
 
+type HeroProps= {
+  isAdmin?: boolean
 
+}
 
-export default async function HeroHome() {
+export default async function HeroHome({isAdmin=false}: HeroProps) {
 
   const images = await prisma.image.findMany({
     where: {
@@ -53,6 +57,14 @@ export default async function HeroHome() {
                   fill
                   alt="Avatar 01"
                 />
+                {isAdmin && (
+                <div className="absolute right-3 top-3 z-20">
+                  <HomepageImageModal
+                    imageId={image.id}
+                    currentImageUrl={image.url}
+                  />
+                </div>
+              )}
               </div>
               ))}
               

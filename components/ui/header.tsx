@@ -39,7 +39,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                href="/admin/signin"
+                href="/admin/login"
                 className="btn-sm bg-gray-800 text-gray-200 shadow-sm hover:bg-gray-900"
               >
                 Connexion
