@@ -64,7 +64,7 @@ export default async function Dashboard() {
 
               <div className="mt-5 flex flex-col gap-2">
                 <Link
-                  href="/admin/homepage"
+                  href="/admin/accueil"
                   className="text-sm font-medium text-blue-600 hover:underline"
                 >
                   Images page d'accueil
