@@ -2,13 +2,14 @@ import { prisma } from "@/lib/prisma/prisma"
 import ProjetsView from "@/components/projetsView"
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     category?: string
-  }
+  }>
 }
 
 export default async function ProjetsPage({ searchParams }: Props) {
-  const selectedCategory = searchParams.category
+  const { category } = await searchParams
+  const selectedCategory = category
 
   const categories = await prisma.category.findMany({
     orderBy: {

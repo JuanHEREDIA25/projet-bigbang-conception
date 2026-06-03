@@ -28,12 +28,12 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl bg-gray-900 p-8 text-white shadow">
+        <div className="rounded-2xl bg-gray-50 p-8 shadow">
           <h2 className="mb-4 text-2xl font-semibold">
             Vous avez un projet ?
           </h2>
 
-          <p className="mb-6 text-gray-300">
+          <p className="mb-6 text-gray-500">
             Décrivez votre besoin en quelques minutes et nous vous
             recontacterons rapidement.
           </p>

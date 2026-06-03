@@ -47,6 +47,7 @@ export default function Footer({ border = false }: { border?: boolean }) {
             <ul className="space-y-2 text-sm">
               <li><Link className="text-gray-600 transition hover:text-gray-900" href="/contact">Contact</Link></li>
               <li><Link className="text-gray-600 transition hover:text-gray-900" href="/mentions-legales">Mentions légales</Link></li>
+              <li><Link className="text-gray-600 transition hover:text-gray-900" href="/politique-confidentialite">Politique de confidentialité</Link></li>
               <li>
                 <Link
                   href="/admin/login"
