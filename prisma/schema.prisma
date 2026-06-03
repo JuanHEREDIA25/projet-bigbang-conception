@@ -83,7 +83,7 @@ model Devis {
   id          Int         @id @default(autoincrement())
   firstname   String
   lastname    String
-  email       String      @unique
+  email       String      
   phone       String
   categoryId  Int?
   category    Category?   @relation(fields: [categoryId], references: [id])

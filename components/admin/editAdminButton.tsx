@@ -25,10 +25,6 @@ export function HomepageImageModal({
     setMounted(true)
   }, [])
 
-  if(!mounted) {
-    return null
-  }
-
   useEffect(() => {
     if (!open) return
 
@@ -171,6 +167,10 @@ export function HomepageImageModal({
       </div>
     </div>
   )
+
+    if(!mounted) {
+    return null
+  }
 
   return (
     <>

@@ -1,8 +1,10 @@
+import DevisUtilisateur from "@/components/devis";
+
 export default function Devis() {
 
     return(
         <>
-            <h1>Voici mon devis</h1>
+            <DevisUtilisateur/>
             
         </>
     )
