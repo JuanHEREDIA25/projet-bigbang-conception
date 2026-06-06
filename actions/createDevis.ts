@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma/prisma"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function createDevis(formData: FormData) {
   const firstname = String(formData.get("firstname"))
@@ -27,4 +28,5 @@ export async function createDevis(formData: FormData) {
   })
 
   revalidatePath("/admin/devis")
+  redirect("/devis?success=1")
 }

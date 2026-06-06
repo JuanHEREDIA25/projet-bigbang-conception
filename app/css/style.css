@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import "aos/dist/aos.css";
 
 /* Additional styles */
 @import './additional-styles/utility-patterns.css' layer(components);

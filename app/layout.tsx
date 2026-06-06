@@ -1,4 +1,4 @@
-import "./css/style.css";
+import "@/app/css/style.css"
 
 import { Inter } from "next/font/google";
 
@@ -9,8 +9,13 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Big Bang Conception",
-  description: "Rénovation, plomberie, électricité et peinture",
+  title: {
+    default: "Big Bang Conception",
+    template: "%s | Big Bang Conception",
+
+  }, 
+
+  description: "Entreprise de rénovation, plomberie, électricité et peinture en Île-de-France.",
   icons: {
     icon: "/icon.png",
   },

@@ -2,13 +2,14 @@ import { prisma } from "@/lib/prisma/prisma"
 import AdminProjectsView from "@/components/admin/projectsViewAdmin"
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     created?: string
     deleted?: string
-  }
+  }>
 }
 
 export default async function AdminProjectsPage({ searchParams }: Props) {
+  const { created, deleted } = await searchParams
   const projects = await prisma.project.findMany({
     include: {
       category: true,
@@ -28,8 +29,8 @@ export default async function AdminProjectsPage({ searchParams }: Props) {
   return (
     <AdminProjectsView
       projects={projectsWithUrls}
-      created={searchParams.created === "1"}
-      deleted={searchParams.deleted === "1"}
+      created={created === "1"}
+      deleted={deleted === "1"}
     />
   )
 }

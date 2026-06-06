@@ -2,11 +2,19 @@ import PageIllustration from "./page-illustration"
 import { createDevis } from "@/actions/createDevis";
 import {prisma} from "@/lib/prisma/prisma"
 
-export default async function DevisUtilisateur() {
 
-      const categories = await prisma.category.findMany({
+type Props = {
+  
+    success?: string
+  }
+
+
+export default async function DevisUtilisateur({success}:Props) {
+
+
+    const categories = await prisma.category.findMany({
     orderBy: {
-      name: "asc",
+    name: "asc",
     },
   })
 
@@ -34,6 +42,19 @@ export default async function DevisUtilisateur() {
               </p>
 
               <form action={createDevis} className="space-y-4">
+                {success === "1" && (
+                  <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-4">
+                    <h3 className="font-semibold text-green-800">
+                      Demande envoyée avec succès
+                    </h3>
+
+                    <p className="mt-2 text-sm text-green-700">
+                      Merci pour votre confiance.
+                      Votre demande a bien été enregistrée et notre équipe reviendra vers vous
+                      dans les meilleurs délais.
+                    </p>
+                  </div>
+                )}
                 <div className="grid gap-4 md:grid-cols-2">
                   <input
                     name="firstname"
@@ -89,7 +110,7 @@ export default async function DevisUtilisateur() {
 
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+                  className="w-full cursor-pointer rounded-md bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
                 >
                   Envoyer ma demande
                 </button>

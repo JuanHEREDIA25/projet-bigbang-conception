@@ -10,9 +10,9 @@ export default function Header() {
 
   const links = [
     { href: "/", label: "Accueil" },
-    { href: "/projets", label: "Nos réalisations" },
+    { href: "/projets", label: "Réalisations" },
     { href: "/contact", label: "Contact"},
-    { href: "/devis", label: "Demande de devis" },
+    { href: "/devis", label: "Devis" },
   ]
 
   return (
