@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma/prisma"
-import { updateDevisStatus } from "@/actions/devisAdmin"
+import { updateDevisStatus, deleteDevis } from "@/actions/devisAdmin"
 
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
   day: "2-digit",
@@ -90,6 +90,16 @@ export default async function DevisAdminTable() {
                       className="rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700"
                     >
                       Modifier
+                    </button>
+                  </form>
+                  <form action={deleteDevis}>
+                    <input type="hidden" name="devisId" value={item.id} />
+
+                    <button
+                      type="submit"
+                      className="rounded-md border border-red-200 px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-50"
+                    >
+                      Supprimer
                     </button>
                   </form>
                 </td>

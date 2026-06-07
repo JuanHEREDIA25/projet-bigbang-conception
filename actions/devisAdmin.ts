@@ -23,3 +23,19 @@ export async function updateDevisStatus(formData: FormData) {
 
   revalidatePath("/admin/devis")
 }
+
+export async function deleteDevis(formData: FormData) {
+  const devisId = Number(formData.get("devisId"))
+
+  if (!devisId) {
+    throw new Error("Demande invalide")
+  }
+
+  await prisma.devis.delete({
+    where: {
+      id: devisId,
+    },
+  })
+
+revalidatePath("/admin/devis")
+}
