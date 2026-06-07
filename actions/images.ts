@@ -1,14 +1,11 @@
 "use server"
 
 import { prisma } from "@/lib/prisma/prisma"
-import { createClient } from "@supabase/supabase-js"
 import { revalidatePath } from "next/cache"
-import { uploadOptimizedImage } from "@/lib/images/upload-images"
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import {
+  uploadOptimizedImage,
+  supabaseAdmin,
+} from "@/lib/images/upload-images"
 
 export async function updateHomepageImage(formData: FormData) {
   const file = formData.get("image") as File | null
@@ -18,26 +15,17 @@ export async function updateHomepageImage(formData: FormData) {
     throw new Error("Image invalide")
   }
 
-  const extension = file.name.split(".").pop()
-  const filePath = await uploadOptimizedImage(
-  file,
-  "homepage",
-  1600
-)
+  const oldImage = await prisma.image.findUnique({
+    where: {
+      id: imageId,
+    },
+  })
 
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const { error } = await supabaseAdmin.storage
-    .from("images-bigbang")
-    .upload(filePath, buffer, {
-      contentType: file.type,
-      upsert: true,
-    })
-
-  if (error) {
-    throw new Error(error.message)
+  if (!oldImage) {
+    throw new Error("Image introuvable")
   }
+
+  const filePath = await uploadOptimizedImage(file, "homepage", 1600)
 
   await prisma.image.update({
     where: {
@@ -47,6 +35,12 @@ export async function updateHomepageImage(formData: FormData) {
       path: filePath,
     },
   })
+
+  if (oldImage.path) {
+    await supabaseAdmin.storage
+      .from("images-bigbang")
+      .remove([oldImage.path])
+  }
 
   revalidatePath("/")
   revalidatePath("/admin/accueil")
