@@ -29,21 +29,47 @@ type Props = {
 
 export default function ProjectEditForm({ project, categories }: Props) {
   const [coverImage, setCoverImage] = useState<File | null>(null)
-  const [galleryImages, setGalleryImages] = useState<File[]>([])
+  const [galleryImages, setGalleryImages] = useState<
+  { file: File; preview: string }[]
+>([])
   const [isPending, startTransition] = useTransition()
+  const [coverPreview, setCoverPreview] = useState<string | null>(null)
+  
 
   function handleCoverChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setCoverImage(event.target.files?.[0] ?? null)
+    const file = event.target.files?.[0] ?? null
+    setCoverImage(file)
+
+    if (file) {
+      setCoverPreview(URL.createObjectURL(file))
+    } else {
+      setCoverPreview(null)
+    }
   }
 
   function handleGalleryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? [])
-    setGalleryImages((current) => [...current, ...files])
+
+    const newImages = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }))
+
+    setGalleryImages((current) => [...current, ...newImages])
+
     event.target.value = ""
   }
 
   function removeNewGalleryImage(index: number) {
-    setGalleryImages((current) => current.filter((_, i) => i !== index))
+    setGalleryImages((current) => {
+      const imageToRemove = current[index]
+
+      if (imageToRemove) {
+        URL.revokeObjectURL(imageToRemove.preview)
+      }
+
+      return current.filter((_, i) => i !== index)
+    })
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,9 +84,9 @@ export default function ProjectEditForm({ project, categories }: Props) {
       formData.set("coverImage", coverImage)
     }
 
-    galleryImages.forEach((file) => {
-      formData.append("images", file)
-    })
+    galleryImages.forEach((image) => {
+    formData.append("images", image.file)
+  })
 
     startTransition(async () => {
       await updateProject(formData)
@@ -141,11 +167,7 @@ export default function ProjectEditForm({ project, categories }: Props) {
 
             <div className="overflow-hidden rounded-xl border bg-gray-50">
               <Image
-                src={
-                  coverImage
-                    ? URL.createObjectURL(coverImage)
-                    : project.coverImageUrl
-                }
+                src={coverPreview ?? project.coverImageUrl}
                 alt={project.title}
                 width={1000}
                 height={500}
@@ -181,14 +203,11 @@ export default function ProjectEditForm({ project, categories }: Props) {
 
             {galleryImages.length > 0 && (
               <div className="mt-4 grid gap-4 md:grid-cols-4">
-                {galleryImages.map((file, index) => (
-                  <div
-                    key={`${file.name}-${index}`}
-                    className="relative overflow-hidden rounded-xl border bg-white"
-                  >
+                {galleryImages.map((image, index) => (
+                  <div key={`${image.file.name}-${index}`}>
                     <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
+                      src={image.preview}
+                      alt={image.file.name}
                       className="h-28 w-full object-cover"
                     />
 
@@ -201,7 +220,7 @@ export default function ProjectEditForm({ project, categories }: Props) {
                     </button>
 
                     <p className="truncate p-2 text-xs text-gray-600">
-                      {file.name}
+                      {image.file.name}
                     </p>
                   </div>
                 ))}

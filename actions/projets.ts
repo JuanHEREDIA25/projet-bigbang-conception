@@ -1,14 +1,9 @@
 "use server"
 
 import { prisma } from "@/lib/prisma/prisma"
-import { createClient } from "@supabase/supabase-js"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { uploadOptimizedImage, supabaseAdmin } from "@/lib/images/upload-images"
 
 function slugify(text: string) {
   return text
@@ -19,26 +14,6 @@ function slugify(text: string) {
     .replace(/(^-|-$)+/g, "")
 }
 
-async function uploadImage(file: File, folder: string) {
-  const extension = file.name.split(".").pop()
-  const filePath = `${folder}/${Date.now()}-${crypto.randomUUID()}.${extension}`
-
-  const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const { error } = await supabaseAdmin.storage
-    .from("images-bigbang")
-    .upload(filePath, buffer, {
-      contentType: file.type,
-      upsert: false,
-    })
-
-  if (error) {
-    throw new Error(error.message)
-  }
-
-  return filePath
-}
 
 export async function createProject(formData: FormData) {
   const title = String(formData.get("title"))
@@ -52,7 +27,11 @@ export async function createProject(formData: FormData) {
   }
 
   const slug = slugify(title)
-  const coverImagePath = await uploadImage(coverFile, "projects/covers")
+  const coverImagePath = await uploadOptimizedImage(
+  coverFile,
+  "projects/covers",
+  1600
+)
 
   const project = await prisma.project.create({
     data: {
@@ -67,7 +46,11 @@ export async function createProject(formData: FormData) {
   for (const file of galleryFiles) {
     if (file.size === 0) continue
 
-    const imagePath = await uploadImage(file, "projects/gallery")
+  const imagePath = await uploadOptimizedImage(
+  file,
+  "projects/gallery",
+  1200
+)
 
     await prisma.projectImage.create({
       data: {
@@ -106,11 +89,11 @@ export async function updateProject(formData: FormData) {
   let coverImagePath = oldProject.coverImage
 
   if (coverFile && coverFile.size > 0) {
-    await supabaseAdmin.storage
-      .from("images-bigbang")
-      .remove([oldProject.coverImage])
-
-    coverImagePath = await uploadImage(coverFile, "projects/covers")
+    coverImagePath = await uploadOptimizedImage(
+      coverFile,
+      "projects/covers",
+      1600
+    )
   }
 
   const newSlug = slugify(title)
@@ -126,10 +109,20 @@ export async function updateProject(formData: FormData) {
     },
   })
 
+  if (coverFile && coverFile.size > 0) {
+    await supabaseAdmin.storage
+      .from("images-bigbang")
+      .remove([oldProject.coverImage])
+  }
+
   for (const file of galleryFiles) {
     if (file.size === 0) continue
 
-    const imagePath = await uploadImage(file, "projects/gallery")
+    const imagePath = await uploadOptimizedImage(
+      file,
+      "projects/gallery",
+      1200
+    )
 
     await prisma.projectImage.create({
       data: {
@@ -143,6 +136,7 @@ export async function updateProject(formData: FormData) {
   revalidatePath(`/projets/${oldProject.slug}`)
   revalidatePath(`/projets/${newSlug}`)
   revalidatePath("/admin/projets")
+  revalidatePath(`/admin/projets/${projectId}/edit`)
 
   redirect("/admin/projets?updated=1")
 }

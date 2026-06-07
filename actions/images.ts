@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma/prisma"
 import { createClient } from "@supabase/supabase-js"
 import { revalidatePath } from "next/cache"
+import { uploadOptimizedImage } from "@/lib/images/upload-images"
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,7 +19,11 @@ export async function updateHomepageImage(formData: FormData) {
   }
 
   const extension = file.name.split(".").pop()
-  const filePath = `homepage/${imageId}-${Date.now()}.${extension}`
+  const filePath = await uploadOptimizedImage(
+  file,
+  "homepage",
+  1600
+)
 
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)

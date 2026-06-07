@@ -1,18 +1,46 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma/prisma"
+import type { Metadata } from "next"
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string
+  }>
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params
+
+  const project = await prisma.project.findUnique({
+    where: { slug },
+    include: { category: true },
+  })
+
+  if (!project) {
+    return {
+      title: "Projet introuvable",
+    }
+  }
+
+  return {
+    title: project.title,
+    description: project.description.slice(0, 155),
+    openGraph: {
+      title: project.title,
+      description: project.description.slice(0, 155),
+      type: "article",
+    },
   }
 }
 
 export default async function ProjetDetailPage({ params }: Props) {
+  const { slug } = await params
+
   const project = await prisma.project.findUnique({
-    where: {
-      slug: params.slug,
-    },
+    where: { slug },
     include: {
       category: true,
       images: true,
@@ -23,11 +51,13 @@ export default async function ProjetDetailPage({ params }: Props) {
     notFound()
   }
 
-  const coverImageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images-bigbang/${project.coverImage}`
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+
+  const coverImageUrl = `${supabaseUrl}/storage/v1/object/public/images-bigbang/${project.coverImage}`
 
   const images = project.images.map((image) => ({
     ...image,
-    url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images-bigbang/${image.url}`,
+    url: `${supabaseUrl}/storage/v1/object/public/images-bigbang/${image.url}`,
   }))
 
   return (
@@ -40,12 +70,14 @@ export default async function ProjetDetailPage({ params }: Props) {
         {project.title}
       </h1>
 
-      <div className="relative mb-8 h-[420px] w-full overflow-hidden rounded-2xl">
+      <div className="mb-8 w-full overflow-hidden rounded-2xl bg-gray-100">
         <Image
           src={coverImageUrl}
           alt={project.title}
-          fill
-          className="object-cover"
+          width={1400}
+          height={900}
+          className="h-auto w-full object-contain"
+          priority
         />
       </div>
 
@@ -57,17 +89,18 @@ export default async function ProjetDetailPage({ params }: Props) {
         Galerie du projet
       </h2>
 
-      <div className="mb-8 w-full overflow-hidden rounded-2xl bg-gray-100">
+      <div className="grid gap-6 md:grid-cols-2">
         {images.map((image) => (
           <div
             key={image.id}
-            className="relative h-80 overflow-hidden rounded-xl"
+            className="overflow-hidden rounded-xl bg-gray-100"
           >
             <Image
               src={image.url}
               alt={project.title}
-              fill
-              className="object-coverh-auto w-full object-contain"
+              width={900}
+              height={600}
+              className="h-auto w-full object-contain"
             />
           </div>
         ))}

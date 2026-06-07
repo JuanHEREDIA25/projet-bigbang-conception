@@ -14,12 +14,18 @@ export default function ProjectCreateFormClient({ categories=[], }: Props) {
   const [coverImage, setCoverImage] = useState<File | null>(null)
   const [galleryImages, setGalleryImages] = useState<File[]>([])
   const [isPending, startTransition] = useTransition()
+  const [coverPreview, setCoverPreview] = useState<string | null>(null)
 
   function handleCoverChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null
     setCoverImage(file)
-  }
 
+      if (file) {
+    setCoverPreview(URL.createObjectURL(file))
+  } else {
+    setCoverPreview(null)
+  }
+}
   function handleGalleryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? [])
 
@@ -116,10 +122,10 @@ export default function ProjectCreateFormClient({ categories=[], }: Props) {
             className="w-full rounded-md border border-gray-300 p-2"
           />
 
-          {coverImage && (
+          {coverPreview && (
             <div className="mt-3 overflow-hidden rounded-xl border bg-gray-50">
               <Image
-                src={URL.createObjectURL(coverImage)}
+                src={coverPreview}
                 alt="Aperçu couverture"
                 width={800}
                 height={400}

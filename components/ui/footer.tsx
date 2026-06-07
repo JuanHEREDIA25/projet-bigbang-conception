@@ -19,7 +19,7 @@ export default function Footer({ border = false }: { border?: boolean }) {
               leurs projets de rénovation, électricité, plomberie et peinture.
             </p>
             <p className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Big Bang Conception. Tous droits réservés.
+              © 2026 Big Bang Conception. Tous droits réservés.
             </p>
           </div>
 
